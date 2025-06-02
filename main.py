@@ -12,14 +12,34 @@ async def fetch_url(url):
             print(f"Error fetching {url}: {e}")
             return ""
 
-def parse_html(html):
-    try:
-        soup = BeautifulSoup(html, "html.parser")
-        title = soup.title.string.strip() if soup.title else "No Title"
-        return {"title": title}
-    except Exception as e:
-        print(f"Error parsing HTML: {e}")
-        return {"title": "Parse Error"}
+def extract_headings_with_elements(html):
+    soup = BeautifulSoup(html, "html.parser")
+    headings = []
+    for tag in ['h1', 'h2', 'h3']:
+        for heading in soup.find_all(tag):
+            text = heading.get_text(strip=True)
+            if text:
+                headings.append(heading)
+    return headings
+
+def select_items(items):
+    print("Aşağıdaki başlıklar bulundu:")
+    for i, item in enumerate(items, 1):
+        print(f"{i}. {item.get_text(strip=True)}")
+    selection = input("Seçmek istediğiniz başlıkların numaralarını virgülle ayırarak yazın: ")
+    indices = [int(x.strip()) for x in selection.split(',') if x.strip().isdigit()]
+    selected = [items[i-1] for i in indices if 0 < i <= len(items)]
+    return selected
+
+def get_content_of_headings(headings):
+    contents = []
+    for heading in headings:
+        content = heading.get_text(strip=True)
+        sibling = heading.find_next_sibling()
+        if sibling and sibling.name == 'p':
+            content += '\n' + sibling.get_text(strip=True)
+        contents.append({'heading': heading.get_text(strip=True), 'content': content})
+    return contents
 
 def save_data(data, filename="output.json"):
     try:
@@ -30,15 +50,25 @@ def save_data(data, filename="output.json"):
         print(f"Error saving data: {e}")
 
 async def main():
-    with open("urls.txt", "r") as file:
-        urls = [line.strip() for line in file if line.strip()]
+    start_url = input("Lütfen taramak istediğiniz web sitesinin URL'sini yazın (örn: https://example.com): ").strip()
+    html = await fetch_url(start_url)
+    
+    if not html:
+        print("Sayfa içeriği alınamadı.")
+        return
 
-    tasks = [fetch_url(url) for url in urls]
-    html_pages = await asyncio.gather(*tasks)
+    headings = extract_headings_with_elements(html)
+    if not headings:
+        print("Bu sayfada hiç başlık bulunamadı.")
+        return
+    
+    selected_headings = select_items(headings)
+    if not selected_headings:
+        print("Hiç başlık seçilmedi.")
+        return
 
-    all_data = [parse_html(html) for html in html_pages]
-
-    save_data(all_data)
+    contents = get_content_of_headings(selected_headings)
+    save_data(contents)
 
 if __name__ == "__main__":
     asyncio.run(main())
