@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "index": 6614,
+    "type": "div",
+    "tag": "div",
+    "text": "Subscribe to our newsletter!",
+    "path": "10.11.56.4852.6414.6415.6416.6614",
+    "full_html": null,
+    "full_text": null
+  },
+  {
+    "index": 6615,
+    "type": "div",
+    "tag": "div",
+    "text": "Subscribe to our newsletter!",
+    "path": "10.11.56.4852.6414.6415.6416.6614.6615",
+    "full_html": null,
+    "full_text": null
+  },
+  {
+    "index": 6616,
+    "type": "div",
+    "tag": "div",
+    "text": "Subscribe to our newsletter!",
+    "path": "10.11.56.4852.6414.6415.6416.6614.6615.6616",
+    "full_html": null,
+    "full_text": null
+  },
+  {
+    "index": 6617,
+    "type": "heading",
+    "tag": "h6",
+    "text": "Subscribe to our newsletter!",
+    "path": "10.11.56.4852.6414.6415.6416.6614.6615.6616.6617",
+    "full_html": null,
+    "full_text": null
+  },
+  {
+    "index": 6618,
+    "type": "text",
+    "tag": "text",
+    "text": "Subscribe to our newsletter!",
+    "path": "10.11.56.4852.6414.6415.6416.6614.6615.6616.6617.6618",
+    "full_html": null,
+    "full_text": null
+  }
+]
